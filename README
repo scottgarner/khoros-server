@@ -1,0 +1,5 @@
+# Enable This On Heroku
+
+`heroku features:enable http-session-affinity`
+
+https://devcenter.heroku.com/articles/session-affinity
