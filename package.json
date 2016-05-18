@@ -1,5 +1,5 @@
 {
-  "name": "repeater",
+  "name": "khoros",
   "version": "1.0.0",
   "description": "Push js events to multiple clients",
   "main": "index.js",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/objectnormal/repeater.git"
+    "url": "git+https://gitlab.com/objectnormal/khoros.git"
   },
   "author": "Scott Garner",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://gitlab.com/objectnormal/repeater/issues"
+    "url": "https://gitlab.com/objectnormal/khoros/issues"
   },
-  "homepage": "https://gitlab.com/objectnormal/repeater#README",
+  "homepage": "https://gitlab.com/objectnormal/khoros#README",
   "dependencies": {
     "express": "^4.13.4",
     "socket.io": "^1.4.6",

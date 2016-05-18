@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <title>One to Many - Performer</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, shrink-to-fit=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />  
+
+    <style>
+      body {
+        cursor: none;
+      }
+      #cursor {
+        position:absolute;
+        top: 0;
+        left: 0;
+        width: 10px;
+        height: 10px;
+        background: blue;
+      }
+    </style>
+
+  </head>
+
+  <body>
+
+    <div id="cursor"></div>
+
+    <script src="/socket.io/socket.io.js"></script>    
+    <script>
+
+      window.onload = function() {
+
+        var socket = io.connect(window.document.location.host ,{ transports: ['websocket', 'polling'] });
+
+        socket.on('connect', function() {
+          console.log("CONNECTED");
+        });
+
+        socket.on('disconnect', function() {
+          console.log("DISCONNECTED");
+        });
+
+        document.onmousemove = function(e) {
+            document.getElementById("cursor").style.top = (e.pageY - 5) + "px";
+            document.getElementById("cursor").style.left = (e.pageX - 5) + "px";
+
+            socket.emit("demo", {room: "audience", pageX: e.pageX, pageY: e.pageY});
+        }
+
+      }    
+
+    </script>
+
+  </body>
+</html>

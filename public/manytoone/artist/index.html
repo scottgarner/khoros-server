@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+  <title>Many to One - Artist</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, shrink-to-fit=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />  
+
+    <style>
+      body {
+        cursor: none;
+        overflow:hidden;
+
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+
+
+      }
+      #cursor {
+        position:absolute;
+        top: 0;
+        left: 0;
+        width: 10px;
+        height: 10px;
+        background: black;
+      }
+    </style>
+
+  </head>
+
+  <body>
+    <div id="value"></div>
+    <div id="cursor"></div>
+
+    <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>  
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/vendor/gyronorm.complete.min.js"></script>    
+    <script>
+
+      var color;
+
+      window.onload = function() {
+
+        randomizeColor();
+
+        var socket = io.connect(window.document.location.host ,{ transports: ['websocket', 'polling'] });
+
+        socket.on('connect', function() {
+          console.log("CONNECTED");
+        });
+
+        socket.on('disconnect', function() {
+          console.log("DISCONNECTED");
+        });
+
+        $(document).bind('touchstart mousedown', function(e) {
+          randomizeColor();
+
+          return false;
+        });
+
+        $(document).bind('touchmove mousemove', function(e){
+          document.getElementById("cursor").style.top = (e.pageY - 5) + "px";
+          document.getElementById("cursor").style.left = (e.pageX - 5) + "px";
+
+          socket.emit("demo", {room: "canvas", pageX: e.pageX, pageY: e.pageY, color: color});  
+
+          return false;
+
+        });
+
+        // 
+
+        function randomizeColor() {
+          color = '#'+Math.floor(Math.random()*16777215).toString(16);
+          $("body").css('background',color);
+        }
+
+        // Device Motion
+
+        var gn = new GyroNorm();
+
+        gn.init().then( function() {
+
+          var x, lastX, xLeft = 30;
+          var y, lastY, yRange = 30;
+          var range = {left: 30, right: 30, up: 20, down: 5};
+
+          gn.start( function(data) {
+
+            // X
+
+            if (data.do.alpha >= 0 && data.do.alpha <= range.left) {
+              x = (1 -(data.do.alpha / range.left)) / 2;
+            } else if (data.do.alpha <= 360 && data.do.alpha >= 360 - range.right) {
+              x = ((1 - ((data.do.alpha - (360 - range.right)) / range.right)) / 2) + .5;
+            } else if (data.do.alpha > range.left && data.do.alpha < 180) {
+              x = 0;
+            } else if (data.do.alpha < (360 - range.right) && data.do.alpha > 180) {
+              x = 1;
+            }
+
+            // Y
+
+            y = data.do.beta;
+
+            if (data.do.beta >= -range.down && data.do.beta <= range.up) {
+
+              y = 1 - ((data.do.beta - -range.down) / (range.up - -range.down));
+
+            } else if (data.do.beta > range.up && data.do.beta < 180) {
+              y = 0;
+            } else if (data.do.beta < -range.down && data.do.beta > -180) {
+              y = 1;
+            }
+
+            $("#cursor").css('left', (x * window.innerWidth) - 5);
+            $("#cursor").css('top', (y * window.innerHeight) - 5);
+
+            $("#value").text(y);
+
+            socket.emit("demo", {room: "canvas", normX: x, normY: y, color: color});            
+  
+          });
+        });
+
+      }    
+
+    </script>
+
+  </body>
+</html>

@@ -24,14 +24,21 @@ io.use(middleware);
 
 io.on('connection', function(socket){
 
+	var room = socket.handshake['query']['room'];
+	if (room) socket.join(room);
+
 	socket.on('*', function(packet){
+
 		if(packet.type == 2) {
 			var type = packet.data[0];
 			var data = packet.data[1];
 
-			io.sockets.emit(type, data);
-		}
+			data.clientID = socket.client.id;
 
+			if (data.room) {
+				io.to(data.room).emit(type, data);
+			}
+		}
 	});
 
 });

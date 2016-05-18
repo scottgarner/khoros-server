@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <title>Many to One - Canvas</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, shrink-to-fit=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />  
+
+    <style>
+      body {
+        cursor: none;
+        margin: 0;
+        padding: 0;
+      }
+      #canvas {
+        background: #efefef;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+
+  </head>
+
+  <body>
+
+    <canvas id="canvas"></canvas>
+
+    <script src="/socket.io/socket.io.js"></script>    
+    <script>
+
+      var canvas, context;
+
+      window.onload = function() {
+
+        canvas = document.getElementById("canvas");
+        context = canvas.getContext("2d");
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;        
+
+        var socket = io.connect(window.document.location.host ,{ 
+          transports: ['websocket', 'polling'],
+          query: "room=canvas"
+        });
+
+        socket.on('connect', function() {
+          console.log("CONNECTED");
+        });
+
+        socket.on('disconnect', function() {
+          console.log("DISCONNECTED");
+        });  
+
+        socket.on('demo', function(data) {
+            context.fillStyle=data.color;
+
+            if (data.pageX ) {
+              context.fillRect(data.pageX - 5,data.pageY - 5,10,10);
+            }
+
+            if (data.normX) {
+              context.fillRect((data.normX * window.innerWidth) - 5, (data.normY * window.innerHeight) - 5,10,10);
+            }
+        });
+
+        window.onresize = function() {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+        }
+
+      }           
+
+    </script>
+
+  </body>
+</html>
