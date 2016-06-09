@@ -38,12 +38,34 @@
     <div id="cursor"></div>
     <canvas id="canvas"></canvas>
 
-    <script src="/socket.io/socket.io.js"></script>    
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/khoros/khoros.js"></script> 
+
     <script>
 
       var color, canvas, context;
 
       window.onload = function() {
+
+
+        // Initialize socket.
+
+        var socket = io.connect(window.document.location.host,
+          { transports: ['websocket', 'polling'] }
+        );
+
+        // Initialize khoros with socket, sing room and listen room.
+        
+        khoros.init(socket, "demo", "demo");
+
+        // Listener
+
+        khoros.listen('position', function(data) {
+            context.fillStyle=data.color;
+            context.fillRect(data.pageX - 5,data.pageY - 5,10,10);
+        });
+
+        // App
 
         canvas = document.getElementById("canvas");
         context = canvas.getContext("2d");
@@ -54,24 +76,6 @@
         color = '#'+Math.floor(Math.random()*16777215).toString(16);
         document.getElementById("cursor").style.background = color;
 
-        var socket = io.connect(window.document.location.host ,{ 
-          transports: ['websocket', 'polling'],
-          query: "room=wall"
-        });
-
-        socket.on('connect', function() {
-          console.log("CONNECTED");
-        });
-
-        socket.on('disconnect', function() {
-          console.log("DISCONNECTED");
-        });  
-
-        socket.on('demo', function(data) {
-            context.fillStyle=data.color;
-            context.fillRect(data.pageX - 5,data.pageY - 5,10,10);
-        });
-
         window.onresize = function() {
           canvas.width = window.innerWidth;
           canvas.height = window.innerHeight;
@@ -81,7 +85,10 @@
             document.getElementById("cursor").style.top = (e.touches[0].clientY - 5) + "px";
             document.getElementById("cursor").style.left = (e.touches[0].clientX - 5) + "px";
 
-            socket.emit("demo", {room: "wall", pageX: e.touches[0].clientX, pageY: e.touches[0].clientY, color: color});
+            context.fillStyle = color;
+            context.fillRect(e.touches[0].clientX - 5, e.touches[0].clientY - 5, 10, 10);
+
+            khoros.sing("position", {pageX: e.touches[0].clientX, pageY: e.touches[0].clientY, color: color});
 
             e.preventDefault();
         }, false);
@@ -90,7 +97,10 @@
             document.getElementById("cursor").style.top = (e.pageY - 5) + "px";
             document.getElementById("cursor").style.left = (e.pageX - 5) + "px";
 
-            socket.emit("demo", {room: "wall", pageX: e.pageX, pageY: e.pageY, color: color});
+            context.fillStyle = color;
+            context.fillRect(e.pageX - 5, e.pageY - 5, 10, 10);
+
+            khoros.sing("position", {pageX: e.pageX, pageY: e.pageY, color: color} );
 
             e.preventDefault();
         }, false);

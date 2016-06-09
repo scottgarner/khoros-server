@@ -30,26 +30,32 @@
 
     <div id="cursor"></div>
 
-    <script src="/socket.io/socket.io.js"></script>    
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/khoros/khoros.js"></script>
     <script>
 
       window.onload = function() {
 
-        var socket = io.connect(window.document.location.host ,{ transports: ['websocket', 'polling'] });
+        // Initialize socket.
 
-        socket.on('connect', function() {
-          console.log("CONNECTED");
-        });
+        var socket = io.connect(window.document.location.host,
+          { transports: ['websocket', 'polling'] }
+        );
 
-        socket.on('disconnect', function() {
-          console.log("DISCONNECTED");
-        });
+        // Initialize khoros with socket, sing room and listen room.
+        
+        khoros.init(socket, "demo", null);
 
         document.onmousemove = function(e) {
             document.getElementById("cursor").style.top = (e.pageY - 5) + "px";
             document.getElementById("cursor").style.left = (e.pageX - 5) + "px";
 
-            socket.emit("demo", {room: "audience", pageX: e.pageX, pageY: e.pageY});
+            // Exampe sing for a "position" song.
+
+            khoros.sing("position", 
+                {pageX: e.pageX, pageY: e.pageY}
+            );
+            
         }
 
       }    

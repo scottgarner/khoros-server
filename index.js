@@ -12,7 +12,9 @@ var server = app.listen(app.get('port'), function() {
 // Socket IO
 
 var io = require('socket.io')(server);
-var middleware = require('socketio-wildcard')();
+
+// Redis Support
+
 var redis = require('socket.io-redis');
 var adapter = redis(process.env.REDIS_URL);
 
@@ -20,25 +22,8 @@ adapter.pubClient.on('error', function(){});
 adapter.subClient.on('error', function(){});
 
 io.adapter(adapter);
-io.use(middleware);
 
-io.on('connection', function(socket){
-
-	var room = socket.handshake['query']['room'];
-	if (room) socket.join(room);
-
-	socket.on('*', function(packet){
-
-		if(packet.type == 2) {
-			var type = packet.data[0];
-			var data = packet.data[1];
-
-			data.clientID = socket.client.id;
-
-			if (data.room) {
-				io.to(data.room).emit(type, data);
-			}
-		}
-	});
-
-});
+// Khoros
+ 
+var khoros = require('khoros-middleware')(server);
+io.use(khoros);

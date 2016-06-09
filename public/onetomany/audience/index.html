@@ -2,7 +2,7 @@
 <html>
   <head>
 
-    <title>One to Many - Artist</title>
+    <title>One to Many - Audience</title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, shrink-to-fit=no">
@@ -30,26 +30,27 @@
 
     <div id="cursor"></div>
 
-    <script src="/socket.io/socket.io.js"></script>    
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/khoros/khoros.js"></script>
+
     <script>
 
 
       window.onload = function() {
 
-        var socket = io.connect(window.document.location.host ,{ 
-          transports: ['websocket', 'polling'],
-          query: "room=audience"
-        });
+        // Initialize socket.
 
-        socket.on('connect', function() {
-          console.log("CONNECTED");
-        });
+        var socket = io.connect(window.document.location.host,
+          { transports: ['websocket', 'polling'] }
+        );
 
-        socket.on('disconnect', function() {
-          console.log("DISCONNECTED");
-        });  
+        // Initialize khoros with socket, sing room and listen room.
 
-        socket.on('demo', function(data) {        
+        khoros.init(socket, null, "demo");
+
+        // Exampe listen for a "position" song.
+
+        khoros.listen('position', function(data) {
             document.getElementById("cursor").style.top = (data.pageY - 5) + "px";
             document.getElementById("cursor").style.left = (data.pageX - 5) + "px";
         });

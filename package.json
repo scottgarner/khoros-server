@@ -18,8 +18,7 @@
   "homepage": "https://gitlab.com/objectnormal/khoros#README",
   "dependencies": {
     "express": "^4.13.4",
-    "socket.io": "^1.4.6",
+    "khoros-middleware": "git+https://github.com/scottgarner/khoros-middleware.git",
     "socket.io-redis": "^1.0.0",
-    "socketio-wildcard": "^0.3.0"
   }
 }
