@@ -76,7 +76,7 @@
           document.getElementById("cursor").style.top = (e.pageY - 5) + "px";
           document.getElementById("cursor").style.left = (e.pageX - 5) + "px";
 
-          khoros.sing("position", {pageX: e.pageX, pageY: e.pageY, color: color});  
+          khoros.sing("position", {x: e.pageX, y: e.pageY, color: color});  
 
           return false;
 
@@ -132,7 +132,7 @@
 
             $("#value").text(y);
 
-            khoros.sing("position", {pageX: e.pageX, pageY: e.pageY, color: color});           
+            khoros.sing("position", {x: e.pageX, y: e.pageY, color: color});           
   
           });
         });

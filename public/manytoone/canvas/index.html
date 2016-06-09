@@ -53,8 +53,8 @@
         khoros.listen('position', function(data) {
             context.fillStyle=data.color;
 
-            if (data.pageX ) {
-              context.fillRect(data.pageX - 5,data.pageY - 5,10,10);
+            if (data.x ) {
+              context.fillRect(data.x - 5,data.y - 5,10,10);
             }
 
             if (data.normX) {

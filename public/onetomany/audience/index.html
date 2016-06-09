@@ -51,8 +51,8 @@
         // Exampe listen for a "position" song.
 
         khoros.listen('position', function(data) {
-            document.getElementById("cursor").style.top = (data.pageY - 5) + "px";
-            document.getElementById("cursor").style.left = (data.pageX - 5) + "px";
+            document.getElementById("cursor").style.top = (data.y - 5) + "px";
+            document.getElementById("cursor").style.left = (data.x - 5) + "px";
         });
 
       }           

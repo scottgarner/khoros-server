@@ -62,7 +62,7 @@
 
         khoros.listen('position', function(data) {
             context.fillStyle=data.color;
-            context.fillRect(data.pageX - 5,data.pageY - 5,10,10);
+            context.fillRect(data.x - 5,data.y - 5,10,10);
         });
 
         // App
@@ -88,7 +88,7 @@
             context.fillStyle = color;
             context.fillRect(e.touches[0].clientX - 5, e.touches[0].clientY - 5, 10, 10);
 
-            khoros.sing("position", {pageX: e.touches[0].clientX, pageY: e.touches[0].clientY, color: color});
+            khoros.sing("position", {x: e.touches[0].clientX, y: e.touches[0].clientY, color: color});
 
             e.preventDefault();
         }, false);
@@ -100,7 +100,7 @@
             context.fillStyle = color;
             context.fillRect(e.pageX - 5, e.pageY - 5, 10, 10);
 
-            khoros.sing("position", {pageX: e.pageX, pageY: e.pageY, color: color} );
+            khoros.sing("position", {x: e.pageX, y: e.pageY, color: color} );
 
             e.preventDefault();
         }, false);
