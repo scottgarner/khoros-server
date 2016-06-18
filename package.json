@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/objectnormal/khoros.git"
+    "url": "git+https://github.com/objectnormal/khoros.git"
   },
   "author": "Scott Garner",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://gitlab.com/objectnormal/khoros/issues"
+    "url": "https://github.com/objectnormal/khoros/issues"
   },
-  "homepage": "https://gitlab.com/objectnormal/khoros#README",
+  "homepage": "https://github.com/objectnormal/khoros#README",
   "dependencies": {
     "express": "^4.13.4",
     "socket.io": "^1.4.6",
