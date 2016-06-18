@@ -1,6 +1,6 @@
 {
   "name": "khoros",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Push js events to multiple clients",
   "main": "index.js",
   "scripts": {
