@@ -25,5 +25,5 @@ io.adapter(adapter);
 
 // Khoros
  
-var khoros = require('khoros-middleware')(server);
+var khoros = require('khoros-middleware')(io,server);
 io.use(khoros);
